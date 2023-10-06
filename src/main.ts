@@ -18,7 +18,8 @@ function main() {
 	screen.width = screenSize;
 	screen.height = screenSize;
 	const playBtn = document.querySelector("#play") as HTMLButtonElement;
-	const cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
+	const resetBtn = document.querySelector("#reset") as HTMLButtonElement;
+	let cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
 	let playing = false;
 
 	if (!screen) {
@@ -27,6 +28,10 @@ function main() {
   
 	if (!playBtn) {
 		throw new Error("No play btn :(");
+	}
+
+	if (!playBtn) {
+		throw new Error("No reset btn :(");
 	}
 
 	function render() {
@@ -81,6 +86,13 @@ function main() {
 		playing = !playing;
 		playBtn.classList.toggle("playing");
 		playBtn.textContent = playing ? "Pause" : "Play";
+	});
+
+	resetBtn.addEventListener("click", () => {
+		cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
+		playing = false;
+		playBtn.classList.remove("playing");
+		playBtn.textContent = "Play";
 	});
 }
 
