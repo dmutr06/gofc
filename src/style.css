@@ -19,11 +19,11 @@ h1 {
 .wrapper {
   display: flex;
   gap: 2rem;
+  margin-top: 1rem;
+  margin-left: 2rem;
 }
 
 canvas#screen {
-  margin-left: 2rem;
-  margin-top: 1rem;
   background-color: #1b1b1b;
   border: 2px #2b2b2b solid;
 }
@@ -39,5 +39,10 @@ button#play {
   font-size: 1.5rem;
   color: #fff;
   text-transform: uppercase;
-  margin-block: 1rem;
+  transition: .3s all;
+  cursor: pointer;
+}
+
+button#play.playing {
+  background-color: #9e0856;
 }
