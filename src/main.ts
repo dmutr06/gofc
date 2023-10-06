@@ -5,15 +5,20 @@ window.addEventListener("DOMContentLoaded", main);
 const COLORS = ["#1b1b1b", "#ff7676", "#08799e"] as const;
 const FSM = [
 	[0, 0, 2, 1, 0, 0, 0, 0, 0],
-	[0, 0, 2, 1, 0, 0, 0, 0, 0],
+	[0, 0, 1, 1, 0, 0, 0, 0, 0],
 	[0, 0, 2, 1, 0, 0, 0, 0, 0],
 ] as const;
 
+let size = 20;
+let screenSize = 800;
+
 function main() {
 	const screen = document.querySelector("#screen") as HTMLCanvasElement;
+	setCanvas();
+	screen.width = screenSize;
+	screen.height = screenSize;
 	const playBtn = document.querySelector("#play") as HTMLButtonElement;
-	const size = 20;
-	const cells = Array<number[] | null>(screen.width / size).fill(null).map(() => Array<number>(screen.height / size).fill(0));
+	const cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
 	let playing = false;
 
 	if (!screen) {
@@ -79,6 +84,19 @@ function main() {
 	});
 }
 
+function setCanvas() {
+	screenSize = Math.floor(Math.min(window.screen.width, window.screen.height) * .7);
+	console.log(screenSize);
+
+	const cellsInLine = screenSize / 30 < 25 ? 20 : 30;
+	
+	size = screenSize / cellsInLine;
+	console.log(size);
+	while (size != Math.floor(size)) {
+		screenSize--;
+		size = screenSize / cellsInLine;
+	}
+}
 
 function nbors(arr: number[][], x: number, y: number) {
 	let counter = 0;
