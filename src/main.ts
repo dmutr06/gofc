@@ -4,9 +4,9 @@ window.addEventListener("DOMContentLoaded", main);
 
 const COLORS = ["#1b1b1b", "#ff7676", "#08799e"] as const;
 const FSM = [
-	[0, 0, 0, 1, 0, 0, 0, 0],
-	[0, 0, 1, 1, 0, 0, 0, 0],
-	// [0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 2, 1, 0, 0, 0, 0, 0],
+	[0, 0, 2, 1, 0, 0, 0, 0, 0],
+	[0, 0, 2, 1, 0, 0, 0, 0, 0],
 ] as const;
 
 function main() {
@@ -39,22 +39,15 @@ function main() {
 		}
   
 		if (playing) {
-			const prev_cells = cells.map(line => {
+			const prevCells = cells.map(line => {
 				return line.map(cell => {
 					return cell;
 				});
 			});
     
-			for (let i = 0; i < screen.width / size; i++) {
-				for (let j = 0; j < screen.height / size; j++) {
-					const nbors_count = nbors(prev_cells, i, j);
-					if (nbors_count) {
-						console.log(nbors_count);
-					}
-
-					cells[i][j] = FSM[prev_cells[i][j]][nbors_count];
-				}
-			}
+			for (let i = 0; i < screen.width / size; i++)
+				for (let j = 0; j < screen.height / size; j++)
+					cells[i][j] = FSM[prevCells[i][j]][nbors(prevCells, i, j)];
 		}
 
 		setTimeout(() => {
@@ -72,14 +65,8 @@ function main() {
 			if ((i * size <= x) && ((i + 1) * size > x))
 				for (let j = 0; j < screen.height / size; j++) {
 					if ((j * size <= y) && ((j + 1) * size > y)) {
-						switch (cells[i][j]) {
-						case 0:
-							cells[i][j] = 1;
-							break;
-						case 1:
-							cells[i][j] = 0;
-							break;
-						}
+						const curCol = cells[i][j];
+						cells[i][j] = (curCol == 2) ? 0 : curCol + 1;
 					}
 				}
 		}
@@ -102,7 +89,7 @@ function nbors(arr: number[][], x: number, y: number) {
 			const cur_y = y + j;
 			if (cur_y === y && cur_x === x) continue;
 
-			if (arr[cur_x][cur_y] === 1) counter++;
+			if (arr[cur_x][cur_y] > 0) counter++;
 		}
 	}
 
