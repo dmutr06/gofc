@@ -52,9 +52,7 @@ canvas#screen {
   cursor: pointer;
 }
 
-.control-btn:hover {
-  background-color: #ff6060;
-}
+
 
 .control-btn img {
   height: 100%;
@@ -65,8 +63,12 @@ button#play.playing {
   background-color: #08799e;
 }
 
-button#play.playing:hover {
-  background-color: #066585;
+
+
+@media (hover: hover) {
+  .control-btn:hover {
+    transform: translateX(.25rem);
+  }
 }
 
 @media (max-width: 800px) {
