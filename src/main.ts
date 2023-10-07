@@ -1,4 +1,6 @@
 import "./style.css";
+import pauseIcon from "./icons/pause.svg";
+import playIcon from "./icons/play.svg";
 
 window.addEventListener("DOMContentLoaded", main);
 const BASE_SIZE = 30;
@@ -15,7 +17,7 @@ function main(): void {
 	const screen = document.querySelector("#screen") as HTMLCanvasElement;
 	setCanvas(screen);
 	const playBtn = document.querySelector("#play") as HTMLButtonElement;
-	const resetBtn = document.querySelector("#reset") as HTMLButtonElement;
+	const stopBtn = document.querySelector("#stop") as HTMLButtonElement;
 	let cells = Array<number[] | null>(screen.width / size).fill(null).map(() => Array<number>(screen.height / size).fill(0));
 	let playing = false;
 
@@ -28,7 +30,7 @@ function main(): void {
 	}
 
 	if (!playBtn) {
-		throw new Error("No reset btn :(");
+		throw new Error("No stop btn :(");
 	}
 
 	function render() {
@@ -78,6 +80,17 @@ function main(): void {
 		}));
 	}
 
+	function updatePlayBtn(): void {
+		if (playing) {
+			playBtn.classList.add("playing");
+			playBtn.innerHTML = `<img src=${pauseIcon} />`;
+		} else {
+			playBtn.classList.remove("playing");
+			playBtn.innerHTML = `<img src=${playIcon} />`;
+		} 
+
+	}
+
 	screen.addEventListener("mousedown", e => {
 		const x = e.offsetX;
 		const y = e.offsetY;
@@ -95,16 +108,14 @@ function main(): void {
 
 	playBtn.addEventListener("click", () => {
 		playing = !playing;
-		playBtn.classList.toggle("playing");
-		playBtn.textContent = playing ? "Pause" : "Play";
+		updatePlayBtn();
 	});
 
-	resetBtn.addEventListener("click", () => {
+	stopBtn.addEventListener("click", () => {
 		setCanvas(screen);
 		cells = initCells();
 		playing = false;
-		playBtn.classList.remove("playing");
-		playBtn.textContent = "Play";
+		updatePlayBtn();
 	});
 
 	window.addEventListener("resize", () => {

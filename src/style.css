@@ -28,6 +28,7 @@ canvas#screen {
   border: 2px #2b2b2b solid;
   /* max-width: 70%;
   max-height: 70%; */
+  border-radius: .5rem;
 }
 
 .control-panel {
@@ -41,33 +42,31 @@ canvas#screen {
   outline: none;
   background-color: #ff7676;
   border-radius: .5rem;
-  padding: .5rem;
-  width: 10rem;
+  padding: 0.5rem;
+  width: 5rem;
   height: 3rem;
   font-size: 1.5rem;
   color: #fff;
   text-transform: uppercase;
-  transition: .3s all;
+  transition: .4s all;
   cursor: pointer;
 }
 
-button#play {
-  border: none;
-  outline: none;
-  background-color: #ff7676;
-  border-radius: .5rem;
-  padding: .5rem;
-  width: 10rem;
-  height: 3rem;
-  font-size: 1.5rem;
-  color: #fff;
-  text-transform: uppercase;
-  transition: .3s all;
-  cursor: pointer;
+.control-btn:hover {
+  background-color: #ff6060;
+}
+
+.control-btn img {
+  height: 100%;
+  aspect-ratio: 1;
 }
 
 button#play.playing {
-  background-color: #9e0856;
+  background-color: #08799e;
+}
+
+button#play.playing:hover {
+  background-color: #066585;
 }
 
 @media (max-width: 800px) {
