@@ -3,6 +3,8 @@ import pauseIcon from "./assets/icons/pause.svg";
 import playIcon from "./assets/icons/play.svg";
 
 window.addEventListener("DOMContentLoaded", main);
+
+const MIN_SCREEN_SIZE = 100;
 const BASE_SIZE = 30;
 const COLORS = ["#1b1b1b", "#ff7676", "#08799e"] as const;
 const FSM = [
@@ -11,9 +13,10 @@ const FSM = [
 	[0, 0, 1, 2, 0, 0, 0, 0, 0],
 ] as const;
 
-let size: number = BASE_SIZE;
+let size = BASE_SIZE;
 
 function main(): void {
+	const speed = 5;
 	const screen = document.querySelector("#screen") as HTMLCanvasElement;
 	setCanvas(screen);
 	const playBtn = document.querySelector("#play") as HTMLButtonElement;
@@ -61,7 +64,7 @@ function main(): void {
 
 		setTimeout(() => {
 			requestAnimationFrame(render);
-		}, 1000 / 5); 
+		}, 1000 / speed); 
 	}
 
 	render();
@@ -128,19 +131,23 @@ function setCanvas(canvas: HTMLCanvasElement) {
 	const windowWidth = Math.min((window.screen.width, window.innerWidth));
 	const windowHeight = Math.min((window.screen.height, window.innerHeight));
 
-	canvas.width = Math.floor(windowWidth * .7);
-	canvas.height = Math.floor(windowHeight * .7);
+	canvas.width = MIN_SCREEN_SIZE > Math.floor(windowWidth * .85) ? MIN_SCREEN_SIZE : Math.floor(windowWidth * .85);
+	canvas.height = MIN_SCREEN_SIZE > Math.floor(windowHeight * .85) ? MIN_SCREEN_SIZE : Math.floor(windowHeight * .85);
 	
 	size = BASE_SIZE;
-	while (canvas.height / size < 15 || canvas.width / size < 15) {
+
+	while (canvas.height / size < 12 || canvas.width / size < 12) {
 		size--;
 	}
 
-	while (Math.floor(canvas.width / size) != canvas.width / size || document.body.clientWidth > windowWidth) {
+	console.log(document.body.clientWidth, windowWidth);
+	
+
+	while ((Math.floor(canvas.width / size) != canvas.width / size) || (document.body.clientWidth - 1 > windowWidth && MIN_SCREEN_SIZE < canvas.width)) {
 		canvas.width--;
 	}
 
-	while (Math.floor(canvas.height / size) != canvas.height / size || document.body.clientHeight > windowHeight) {
+	while ((Math.floor(canvas.height / size) != canvas.height / size) || (document.body.clientHeight - 1 > windowHeight && MIN_SCREEN_SIZE < canvas.height)) {
 		canvas.height--;
 	}
 }
