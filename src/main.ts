@@ -1,25 +1,22 @@
 import "./style.css";
 
 window.addEventListener("DOMContentLoaded", main);
-
+const BASE_SIZE = 30;
 const COLORS = ["#1b1b1b", "#ff7676", "#08799e"] as const;
 const FSM = [
+	[0, 0, 0, 1, 0, 0, 0, 0, 0],
 	[0, 0, 2, 1, 0, 0, 0, 0, 0],
-	[0, 0, 1, 1, 0, 0, 0, 0, 0],
-	[0, 0, 2, 1, 0, 0, 0, 0, 0],
+	[0, 0, 1, 2, 0, 0, 0, 0, 0],
 ] as const;
 
-let size = 20;
-let screenSize = 800;
+let size: number = BASE_SIZE;
 
-function main() {
+function main(): void {
 	const screen = document.querySelector("#screen") as HTMLCanvasElement;
-	setCanvas();
-	screen.width = screenSize;
-	screen.height = screenSize;
+	setCanvas(screen);
 	const playBtn = document.querySelector("#play") as HTMLButtonElement;
 	const resetBtn = document.querySelector("#reset") as HTMLButtonElement;
-	let cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
+	let cells = Array<number[] | null>(screen.width / size).fill(null).map(() => Array<number>(screen.height / size).fill(0));
 	let playing = false;
 
 	if (!screen) {
@@ -67,6 +64,20 @@ function main() {
 
 	render();
 
+	function initCells(): number[][] {
+		return Array<number[] | null>(screen.width / size).fill(null).map(() => Array<number>(screen.height / size).fill(0));
+	}
+
+	function reinitCells(): number[][] {
+		return initCells().map((line, x) => line.map((_, y) => {
+			const prevLine = cells[x];
+			if (prevLine) {
+				return prevLine[y] || 0;
+			}
+			return 0;
+		}));
+	}
+
 	screen.addEventListener("mousedown", e => {
 		const x = e.offsetX;
 		const y = e.offsetY;
@@ -89,28 +100,41 @@ function main() {
 	});
 
 	resetBtn.addEventListener("click", () => {
-		cells = Array<number[] | null>(screenSize / size).fill(null).map(() => Array<number>(screenSize / size).fill(0));
+		setCanvas(screen);
+		cells = initCells();
 		playing = false;
 		playBtn.classList.remove("playing");
 		playBtn.textContent = "Play";
 	});
+
+	window.addEventListener("resize", () => {
+		setCanvas(screen);
+		cells = reinitCells();
+	});
 }
 
-function setCanvas() {
-	screenSize = Math.floor(Math.min(window.screen.width, window.screen.height) * .7);
-	console.log(screenSize);
+function setCanvas(canvas: HTMLCanvasElement) {
+	const windowWidth = Math.min((window.screen.width, window.innerWidth));
+	const windowHeight = Math.min((window.screen.height, window.innerHeight));
 
-	const cellsInLine = screenSize / 30 < 25 ? 20 : 30;
+	canvas.width = Math.floor(windowWidth * .7);
+	canvas.height = Math.floor(windowHeight * .7);
 	
-	size = screenSize / cellsInLine;
-	console.log(size);
-	while (size != Math.floor(size)) {
-		screenSize--;
-		size = screenSize / cellsInLine;
+	size = BASE_SIZE;
+	while (canvas.height / size < 15 || canvas.width / size < 15) {
+		size--;
+	}
+
+	while (Math.floor(canvas.width / size) != canvas.width / size || document.body.clientWidth > windowWidth) {
+		canvas.width--;
+	}
+
+	while (Math.floor(canvas.height / size) != canvas.height / size || document.body.clientHeight > windowHeight) {
+		canvas.height--;
 	}
 }
 
-function nbors(arr: number[][], x: number, y: number) {
+function nbors(arr: number[][], x: number, y: number): number {
 	let counter = 0;
 	for (let i = (x === 0 ? 0 : -1); i <= (x === arr.length - 1 ? 0 : 1); i++) {
 		const cur_x = x + i;
