@@ -1,6 +1,6 @@
 import "./style.css";
-import pauseIcon from "./icons/pause.svg";
-import playIcon from "./icons/play.svg";
+import pauseIcon from "./assets/icons/pause.svg";
+import playIcon from "./assets/icons/play.svg";
 
 window.addEventListener("DOMContentLoaded", main);
 const BASE_SIZE = 30;
