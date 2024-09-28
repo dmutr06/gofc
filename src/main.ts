@@ -7,10 +7,11 @@ window.addEventListener("DOMContentLoaded", main);
 const MIN_SCREEN_SIZE = 100;
 const BASE_SIZE = 30;
 const COLORS = ["#1b1b1b", "#ff7676", "#08799e"] as const;
+
 const FSM = [
-	[0, 0, 2, 1, 0, 0, 0, 0, 0],
-	[0, 0, 2, 1, 0, 0, 0, 0, 0],
-	[0, 0, 2, 1, 0, 0, 0, 0, 0],
+	[0, 0, 0, 1, 0, 0, 0, 0, 0],
+	[0, 0, 2, 2, 0, 0, 0, 0, 0],
+	[0, 0, 1, 2, 0, 0, 0, 0, 0],
 ] as const;
 
 let size = BASE_SIZE;
