@@ -140,8 +140,6 @@ function setCanvas(canvas: HTMLCanvasElement) {
 	while (canvas.height / size < 12 || canvas.width / size < 12) {
 		size--;
 	}
-
-	console.log(document.body.clientWidth, windowWidth);
 	
 
 	while ((Math.floor(canvas.width / size) != canvas.width / size) || (document.body.clientWidth - 1 > windowWidth && MIN_SCREEN_SIZE < canvas.width)) {
@@ -155,11 +153,11 @@ function setCanvas(canvas: HTMLCanvasElement) {
 
 function nbors(arr: number[][], x: number, y: number): number {
 	let counter = 0;
-	for (let i = (x === 0 ? 0 : -1); i <= (x === arr.length - 1 ? 0 : 1); i++) {
-		const cur_x = x + i;
+	for (let i = -1; i <= 1; i++) {
+		const cur_x = (x + i + arr.length) % arr.length; 
     
-		for (let j = (y === 0 ? 0 : -1); j <= (y === arr[cur_x].length - 1 ? 0 : 1); j++) {
-			const cur_y = y + j;
+		for (let j = -1; j <= 1; j++) {
+			const cur_y = (arr[cur_x].length + y + j) % arr[cur_x].length;
 			if (cur_y === y && cur_x === x) continue;
 
 			if (arr[cur_x][cur_y] > 0) counter++;
